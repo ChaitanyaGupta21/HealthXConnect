@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthXConnect - Medical Report System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>HealthXConnect</span>
+            </div>
+            <div class="nav-menu">
+                <button class="nav-btn" onclick="showSection('doctor-login')">Doctor Login</button>
+                <button class="nav-btn" onclick="showSection('patient-search')">Patient Portal</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Welcome Section -->
+        <section id="welcome" class="section active">
+            <div class="welcome-content">
+                <div class="welcome-text">
+                    <h1>Welcome to HealthXConnect</h1>
+                    <p>Professional medical report system for doctors and patients</p>
+                    <div class="welcome-buttons">
+                        <button class="btn btn-primary" onclick="showSection('doctor-signup')">
+                            <i class="fas fa-user-md"></i> Doctor Sign Up
+                        </button>
+                        <button class="btn btn-secondary" onclick="showSection('doctor-login')">
+                            <i class="fas fa-sign-in-alt"></i> Doctor Login
+                        </button>
+                        <button class="btn btn-outline" onclick="showSection('patient-search')">
+                            <i class="fas fa-user"></i> Patient Portal
+                        </button>
+                    </div>
+                </div>
+                <div class="welcome-image">
+                    <i class="fas fa-stethoscope"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- Doctor Sign Up Section -->
+        <section id="doctor-signup" class="section">
+            <div class="form-container">
+                <div class="form-header">
+                    <h2><i class="fas fa-user-md"></i> Doctor Registration</h2>
+                    <p>Create your professional account</p>
+                </div>
+                <form id="doctorSignupForm" class="form">
+                    <div class="form-group">
+                        <label for="clinicName">Clinic Name *</label>
+                        <input type="text" id="clinicName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="clinicAddress">Clinic Address *</label>
+                        <textarea id="clinicAddress" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="clinicPhone">Clinic Phone *</label>
+                        <input type="tel" id="clinicPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="clinicLogo">Clinic Logo</label>
+                        <div class="logo-upload-container">
+                            <input type="file" id="clinicLogoFile" accept="image/*" style="display: none;">
+                            <button type="button" class="btn btn-outline" onclick="document.getElementById('clinicLogoFile').click()">
+                                <i class="fas fa-upload"></i> Upload Logo
+                            </button>
+                            <input type="url" id="clinicLogo" placeholder="Or enter logo URL">
+                        </div>
+                        <div id="logoPreview" class="logo-preview" style="display: none;">
+                            <img id="logoPreviewImg" src="" alt="Logo Preview">
+                            <button type="button" class="remove-logo" onclick="removeLogo()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="doctorName">Doctor Name *</label>
+                            <input type="text" id="doctorName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="qualification">Qualification *</label>
+                            <input type="text" id="qualification" placeholder="MBBS, MD, etc." required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="doctorId">Doctor ID *</label>
+                            <input type="text" id="doctorId" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password *</label>
+                            <input type="password" id="password" required>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Register</button>
+                        <button type="button" class="btn btn-outline" onclick="showSection('doctor-login')">Already have account?</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Doctor Login Section -->
+        <section id="doctor-login" class="section">
+            <div class="form-container">
+                <div class="form-header">
+                    <h2><i class="fas fa-sign-in-alt"></i> Doctor Login</h2>
+                    <p>Access your dashboard</p>
+                </div>
+                <form id="doctorLoginForm" class="form">
+                    <div class="form-group">
+                        <label for="loginDoctorId">Doctor ID</label>
+                        <input type="text" id="loginDoctorId" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Login</button>
+                        <button type="button" class="btn btn-outline" onclick="showSection('doctor-signup')">New doctor?</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Doctor Dashboard Section -->
+        <section id="doctor-dashboard" class="section">
+            <div class="dashboard-container">
+                <div class="dashboard-header">
+                    <div class="doctor-info">
+                        <h2>Welcome, Dr. <span id="loggedDoctorName"></span></h2>
+                        <p id="loggedClinicName"></p>
+                    </div>
+                    <div class="dashboard-actions">
+                        <button class="btn btn-outline" onclick="showSection('welcome')">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="dashboard-content">
+                    <div class="report-form-container">
+                        <div class="form-header">
+                            <h3><i class="fas fa-file-medical"></i> Create Medical Report</h3>
+                        </div>
+                        <form id="reportForm" class="report-form">
+                            <div class="patient-details">
+                                <h4>Patient Information</h4>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="patientName">Patient Name *</label>
+                                        <input type="text" id="patientName" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="patientId">Patient ID *</label>
+                                        <input type="text" id="patientId" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="patientPhone">Phone Number *</label>
+                                    <input type="tel" id="patientPhone" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="diagnosis">Diagnosis/Complaints *</label>
+                                    <textarea id="diagnosis" rows="3" required></textarea>
+                                </div>
+                            </div>
+
+                            <div class="medicine-section">
+                                <h4>Medicines</h4>
+                                <div class="medicine-search">
+                                    <div class="form-group">
+                                        <label for="medicineSearch">Search Medicine</label>
+                                        <div class="search-container">
+                                            <input type="text" id="medicineSearch" placeholder="Type medicine name...">
+                                            <div id="medicineSuggestions" class="suggestions"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div id="selectedMedicines" class="selected-medicines">
+                                    <!-- Selected medicines will appear here -->
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-print"></i> Generate Report
+                                </button>
+                                <button type="button" class="btn btn-outline" onclick="previewReport()">
+                                    <i class="fas fa-eye"></i> Preview
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="report-preview-container">
+                        <div class="preview-header">
+                            <h3><i class="fas fa-eye"></i> Report Preview</h3>
+                        </div>
+                        <div id="reportPreview" class="report-preview">
+                            <div class="preview-placeholder">
+                                <i class="fas fa-file-medical"></i>
+                                <p>Report preview will appear here</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Patient Search Section -->
+        <section id="patient-search" class="section">
+            <div class="form-container">
+                <div class="form-header">
+                    <h2><i class="fas fa-search"></i> Find Your Reports</h2>
+                    <p>Enter your details to access medical reports</p>
+                </div>
+                <form id="patientSearchForm" class="form">
+                    <div class="form-group">
+                        <label for="searchPatientId">Patient ID</label>
+                        <input type="text" id="searchPatientId" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="searchPatientPhone">Phone Number</label>
+                        <input type="tel" id="searchPatientPhone" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Search Reports</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Patient Reports Section -->
+        <section id="patient-reports" class="section">
+            <div class="reports-container">
+                <div class="reports-header">
+                    <h2><i class="fas fa-file-medical"></i> Your Medical Reports</h2>
+                    <button class="btn btn-outline" onclick="showSection('patient-search')">
+                        <i class="fas fa-arrow-left"></i> Back to Search
+                    </button>
+                </div>
+                <div id="reportsList" class="reports-list">
+                    <!-- Reports will be displayed here -->
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Print Modal -->
+    <div id="printModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Print Report</h3>
+                <button class="close-btn" onclick="closePrintModal()">&times;</button>
+            </div>
+            <div id="printContent" class="print-content">
+                <!-- Print content will be generated here -->
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="printReport()">
+                    <i class="fas fa-print"></i> Print
+                </button>
+                <button class="btn btn-outline" onclick="downloadReport()">
+                    <i class="fas fa-download"></i> Download
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Medicine Selection Modal -->
+    <div id="medicineModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Medicine</h3>
+                <button class="close-btn" onclick="closeMedicineModal()">&times;</button>
+            </div>
+            <div class="medicine-form">
+                <div id="selectedMedicineDetails" class="medicine-details">
+                    <!-- Selected medicine details will appear here -->
+                </div>
+                <div class="dosage-timing">
+                    <h4>Dosage Timing</h4>
+                    <div class="timing-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="morning" value="Morning">
+                            <span class="checkmark"></span>
+                            Morning
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="afternoon" value="Afternoon">
+                            <span class="checkmark"></span>
+                            Afternoon
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="evening" value="Evening">
+                            <span class="checkmark"></span>
+                            Evening
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="night" value="Night">
+                            <span class="checkmark"></span>
+                            Night
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="dosageInstructions">Additional Instructions</label>
+                    <textarea id="dosageInstructions" placeholder="e.g., Take after meals, 1 tablet"></textarea>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="addMedicineToList()">Add Medicine</button>
+                <button class="btn btn-outline" onclick="closeMedicineModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="demo-data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html> 
